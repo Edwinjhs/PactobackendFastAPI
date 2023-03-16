@@ -8,6 +8,7 @@ class User(BaseModel):
     username: str
     password: str
     cohabitation_agreement: bool
+    hashed_password: str
     status: int
     description: str
     knowledge_interests: str
@@ -24,6 +25,7 @@ class User(BaseModel):
                 "email": "edwin.jhnsn@gmail.com",
                 "username": "edwinjhs",
                 "password": "12345678",
+                "hashed_password": "",
                 "cohabitation_agreement": True,
                 "status": 0,
                 "description": "backend iasdas",
@@ -35,3 +37,10 @@ class User(BaseModel):
                 "phone_number": "3213943876"
             }
         }
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class TokenData(BaseModel):
+    username:str

@@ -1,7 +1,10 @@
 from fastapi import FastAPI
-from database import engine, Base
 from fastapi.responses import HTMLResponse, JSONResponse
 
+# DATA BASE
+from database import engine, Base
+
+# ROUTERS
 from routers.user import user_router
 from routers.token import token_router
 

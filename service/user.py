@@ -13,20 +13,20 @@ import bcrypt
 
 
 class UserService():
-    pwd_context = CryptContext(schemes=[bcrypt], deprecated="auto")
+    pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
     oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
     def __init__(self, db: Session):
         if not isinstance(db, Session):
             raise TypeError("db must be a Session instance")
         self.db = db
-
+    @staticmethod
     def get_db():
         try:
             db = SessionLocal()
             yield db
         finally:
-            db.close
+            db.close()
 
 
 # auth
@@ -54,6 +54,8 @@ class UserService():
         )
         self.db.add(user_model)
         self.db.commit()
+        print(user_model)
+
         return
     
     def get_user_by_id(self,id:int):

@@ -1,6 +1,6 @@
 from fastapi import HTTPException, Depends, status, FastAPI
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from sqlalchemy.orm import session
+from sqlalchemy.orm import session, Session
 from datetime import datetime, timedelta
 import os
 
@@ -13,9 +13,9 @@ import schemas.user as UserSchema
 from service.user import UserService as UserService
 from models.user import Users as UserModel
 
-SECRET_KEY = os.getenv("SECRET_KEY")
-ALGORITHM = os.getenv("ALGORITHM")
-ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
+SECRET_KEY ="jwtsecretkey"
+ALGORITHM ="HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES =15
 
 
 
@@ -23,17 +23,18 @@ class UserInDB(UserSchema.User):
     hashed_password: str
 
 class user_token():
-
-    def get_user(username: str, db):
+    @staticmethod   
+    def get_user(db, username):
         user_model = db.query(UserModel).filter(UserModel.username == username).first()
         if user_model is not None:
             return user_model
-
-    def decode_token(token, db):
-        user = user_token.get_user(token, db)
+    @staticmethod
+    def decode_token( db, token):
+        user = user_token.get_user(db, token)
         return user
 
     async def get_current_user(token = Depends(UserService.oauth2_scheme),  db: session = Depends(UserService.get_db)):
+        # es el que extrae la info para loguearme
         credentials_exception = HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",
@@ -41,7 +42,7 @@ class user_token():
         )
         try:
             payload=jwt.decode(token,SECRET_KEY,algorithms=[ALGORITHM])
-            username:str =payload.get("sub")
+            username=payload.get("sub")
             if username is None:
                 raise credentials_exception
             token_data = UserSchema.TokenData(username=username)
@@ -63,17 +64,17 @@ class user_token():
         return current_user
     
     # HASHED AND JWT
-    def verify_password (plain_password, hashed_password):
+    def verify_password (plain_password: str, hashed_password: str)->bool:
         return UserService.pwd_context.verify(plain_password, hashed_password)
     
-    def get_password_hash(password):
+    def get_password_hash(password: str):
         return UserService.pwd_context.verify(password)
     
-    def authenticate_user(db, username:str, password:str):
+    def authenticate_user(db, username, password):
         user = user_token.get_user(db,username)
         if not user:
             return False
-        if not user_token.verify_password(password, user.hashed_password):
+        if not user_token.verify_password(password, user.password):
             return False
         return user
     

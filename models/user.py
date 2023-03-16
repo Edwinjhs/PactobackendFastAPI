@@ -9,7 +9,8 @@ class Users(Base):
     lastname = Column(String)
     email = Column(String)
     username = Column(String)
-    password = Column(Text)
+    password = Column(String)
+    hashed_password = Column(String)
     cohabitation_agreement = Column(Boolean)
     status = Column(Integer)
     description = Column(Text)
@@ -25,15 +26,16 @@ class Users(Base):
 #   "name": "Edwin",
 #   "lastname": "Hernández",
 #   "email": "edwin@gmail.com",
-#   "username": "edwinjhs",
+#   "username": "edwinjhs2",
 #   "password": "casa123",
-#   "cohabitation_agreement": true,
+#   "cohabitation_agreement": True,
 #   "status": 0,
 #   "description": "Esta es la descripción",
 #   "knowledge_interests": "Mis intereses",
 #   "created_at": "2023-03-14T11:02:36.595Z",
 #   "updated_at": "2023-03-14T11:02:36.595Z",
-#   "forgot_password": false,
+#   "forgot_password": False,
 #   "image_profile": "string",
 #   "phone_number": "+351964702709"
 # }
+

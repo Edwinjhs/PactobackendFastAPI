@@ -1,0 +1,14 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+#file DB
+database.db
+
+# dotenv
+.env
+
+# node_modules
+/node_modules
+/venv

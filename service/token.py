@@ -1,15 +1,20 @@
 from fastapi import HTTPException, Depends, status
 from sqlalchemy.orm import session
+from datetime import datetime, timedelta
 import os
+
+# HASHING AND JWT 
+from jose import JWTError, jwt
+from passlib.context import CryptContext
 
 from schemas.user import User as UserSchema
 from service.user import UserService as UserService
 from models.user import Users as UserModel
 
-
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
+
 
 
 class UserInDB(UserSchema):
@@ -44,3 +49,28 @@ class user_token():
             raise HTTPException(status_code=400, detail="Usuario no validado por el Admin")
         return current_user
     
+    # HASHED AND JWT
+    def verify_password (plain_password, hashed_password):
+        return UserService.pwd_context.verify(plain_password, hashed_password)
+    
+    def get_password_hash(password):
+        return UserService.pwd_context.verify(password)
+    
+    def authenticate_user(db, username:str, password:str):
+        user = user_token.get_user(db,username)
+        if not user:
+            return False
+        if not user_token.verify_password(password, user.hashed_password):
+            return False
+        return user
+    
+    # CREA UN TOKEN DE ACCESO
+    def create_access_token(data:dict, expires_delta: timedelta | None = None):
+        to_encode = data.copy()
+        if expires_delta:
+            expire = datetime.utcnow() + expires_delta
+        else:
+            expire = datetime.utcnow()+ timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        to_encode.update({"exp":expire})
+        encode_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+        return encode_jwt

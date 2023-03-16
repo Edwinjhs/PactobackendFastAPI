@@ -2,12 +2,18 @@ from fastapi import FastAPI, HTTPException, Depends, status
 from models.user import Users as UserModel
 from sqlalchemy.orm import Session
 
+# HASHING AND JWT 
+from jose import JWTError, jwt
+from passlib.context import CryptContext
+
 from schemas.user import User as UserSchema
 from database import SessionLocal
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 import bcrypt
 
+
 class UserService():
+    pwd_context = CryptContext(schemes=[bcrypt], deprecated="auto")
     oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
     def __init__(self, db: Session):
@@ -21,7 +27,9 @@ class UserService():
             yield db
         finally:
             db.close
-    
+
+
+# auth
     def get_users(self):
         result = self.db.query(UserModel).all()
         return result
@@ -89,3 +97,4 @@ class UserService():
             self.db.commit()
             return True
         return False
+    

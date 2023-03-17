@@ -1,12 +1,10 @@
 from fastapi import HTTPException, Depends, status, FastAPI
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from sqlalchemy.orm import session, Session
+from sqlalchemy.orm import session
 from datetime import datetime, timedelta
 import os
 
 # HASHING AND JWT 
 from jose import JWTError, jwt
-from passlib.context import CryptContext
 
 import schemas.user as UserSchema
 
@@ -53,7 +51,11 @@ class user_token():
         if user is None:
             raise credentials_exception
         return user
-
+    
+    async def get_current_active_userid(db: session = Depends(UserService.get_db)):
+        current_user= user_token.get_current_user()
+        user_model = db.query(UserModel).filter(UserModel.username == current_user.username).first()
+        return user_model.id
     
     async def get_current_active_user(current_user: UserSchema.User = Depends(get_current_user)):
         # una funcion que obtiene un usuario actual activo a partir del token

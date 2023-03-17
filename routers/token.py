@@ -1,20 +1,16 @@
 from fastapi import  HTTPException, Depends,  APIRouter, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
-from datetime import datetime, timedelta
-import bcrypt
+from datetime import timedelta
 
 import service.token as Token_service
-from models.user import Users as UserModel
 from service.user import UserService as UserService
 from schemas.user import User as UserSchema
 from service.token import user_token as TokenService
 
 token_router = APIRouter()
 
-
-
-@token_router.post("/token")
+@token_router.post("/token",tags=['token'])
 async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(UserService.get_db)):
     user = TokenService.authenticate_user(db, form_data.username, form_data.password)
     if not user:
@@ -26,12 +22,12 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = 
     return{"access_token": access_token, "token_type": "bearer"}
 
 
-@token_router.get("/api/users/me")
+@token_router.get("/api/users/me",tags=['token'])
 async def read_users_me(current_user: UserSchema = Depends(TokenService.get_current_active_user)):
     return current_user
 # obtiene el usuario actual
 
-@token_router.get("/api/users/me/items/")
+@token_router.get("/api/users/me/items/",tags=['token'])
 async def read_users_me_items(current_user: UserSchema = Depends(TokenService.get_current_active_user)):
     return [{"item_id": "Foo", "owner": current_user.username}]
 # obtiene los items del usuario actual

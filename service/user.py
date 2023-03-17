@@ -3,7 +3,6 @@ from models.user import Users as UserModel
 from sqlalchemy.orm import Session
 
 # HASHING AND JWT 
-from jose import JWTError, jwt
 from passlib.context import CryptContext
 
 from schemas.user import User as UserSchema
@@ -54,8 +53,6 @@ class UserService():
         )
         self.db.add(user_model)
         self.db.commit()
-        print(user_model)
-
         return
     
     def get_user_by_id(self,id:int):

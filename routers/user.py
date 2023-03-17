@@ -16,10 +16,9 @@ def read_api(db: session = Depends(UserService.get_db)):
 
 
 @user_router.post("/api/",tags=['user'],status_code=201,response_model=dict)
-def create_user(user:UserSchema,db: session = Depends(UserService.get_db),current_user: UserSchema = Depends(TokenService.get_current_active_user)):
+def create_user(user:UserSchema,db: session = Depends(UserService.get_db)):
     UserService(db).create_user(user)
-    return JSONResponse(content={"message":"Se ha registrado un user","status_code":201})
-
+    return JSONResponse(content={"message":'Se ha creado el usuario correctamente'})
 
 @user_router.delete('/api/user/{id}',tags=['user'])
 def delete_user(id:int, db: session = Depends(UserService.get_db),current_user: UserSchema = Depends(TokenService.get_current_active_user)):

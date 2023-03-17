@@ -1,4 +1,6 @@
 from sqlalchemy import Column, Integer, String, Boolean, Text, DateTime
+from sqlalchemy.orm import relationship
+
 from database import Base
 
 class Users(Base):
@@ -20,22 +22,6 @@ class Users(Base):
     forgot_password = Column(Boolean)
     image_profile = Column(String)
     phone_number = Column(String)
-
-
-# {
-#   "name": "Edwin",
-#   "lastname": "Hernández",
-#   "email": "edwin@gmail.com",
-#   "username": "edwinjhs2",
-#   "password": "casa123",
-#   "cohabitation_agreement": True,
-#   "status": 0,
-#   "description": "Esta es la descripción",
-#   "knowledge_interests": "Mis intereses",
-#   "created_at": "2023-03-14T11:02:36.595Z",
-#   "updated_at": "2023-03-14T11:02:36.595Z",
-#   "forgot_password": False,
-#   "image_profile": "string",
-#   "phone_number": "+351964702709"
-# }
+    
+    posts = relationship("Posts", back_populates="owner")
 

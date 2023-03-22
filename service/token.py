@@ -36,7 +36,7 @@ class user_token():
         credentials_exception = HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",
-            headers={"WWW-Authenticate": "Bearer"},
+            headers={"WWW-Authenticate":"Bearer"},
         )
         try:
             payload=jwt.decode(token,SECRET_KEY,algorithms=[ALGORITHM])

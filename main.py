@@ -9,17 +9,37 @@ from database import engine, Base
 from routers.user import user_router
 from routers.token import token_router
 from routers.post import post_router
+from routers.comments import comment_router
 # from routers.comments import comment_router
 
 
 from middleware.middleware import middleware_router
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI()
 app.title = "PACTO con FastAPI"
 app.version = "0.0.1"
 
+
+# Configurar el middleware CORS
+origins = [
+    "http://localhost:3000",  # Agrega aquí el origen de tu aplicación de React
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
 app.include_router(user_router)
 app.include_router(post_router)
 app.include_router(token_router)
+app.include_router(comment_router)
+
 # app.include_router(comment_router)
 app.include_router(middleware_router)
 
@@ -38,4 +58,4 @@ async def add_process_time_header(request:Request, call_next):
 
 @app.get('/',tags=['home'])
 def message():
-    return HTMLResponse('<h1>Hello PACTO</h1>')
+    return HTMLResponse('<h1>esto esta en el back</h1>')

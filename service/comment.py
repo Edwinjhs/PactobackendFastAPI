@@ -1,80 +1,75 @@
-# from fastapi import FastAPI, HTTPException, Depends, status
-# from sqlalchemy.orm import Session
+from fastapi import FastAPI, HTTPException, Depends, status
+from sqlalchemy.orm import Session
 
-# from database import SessionLocal
-# import bcrypt
+from database import SessionLocal
 
-# from models.post import Posts as PostModel
-# from schemas.post import Post as PostSchema
-# from service.token import user_token as ServiceToken
+from models.comments import Comments as CommentModel
+from schemas.comment import Comment as CommentSchema
 
-# class PostService():
-#     def __init__(self, db: Session):
-#         if not isinstance(db, Session):
-#             raise TypeError("db must be a Session instance")
-#         self.db = db
+class CommentService():
+    def __init__(self, db: Session):
+        if not isinstance(db, Session):
+            raise TypeError("db must be a Session instance")
+        self.db = db
 
-#     @staticmethod
-#     def get_db():
-#         try:
-#             db = SessionLocal()
-#             yield db
-#         finally:
-#             db.close()
+    @staticmethod
+    def get_db():
+        try:
+            db = SessionLocal()
+            yield db
+        finally:
+            db.close()
 
-#     # auth
-#     def get_posts(self):
-#         result = self.db.query(PostModel).all()
-#         return result
+    # auth
+    def get_comments(self):
+        result = self.db.query(CommentModel).all()
+        return result
     
-#     def create_post(self, post:PostModel):
-#         # current_user = ServiceToken.get_current_active_userid()
-#         post_model = PostModel(
-#         id_user= post.id_user,
-#         status = post.status,
-#         description = post.description,
-#         created_at = post.created_at,
-#         updated_at = post.updated_at,
-#         image_post = post.image_post,
-#         video_post = post.video_post,
-#         document_post = post.document_post,
-#         )
-#         self.db.add(post_model)
-#         self.db.commit()
-#         return
+    def create_comment(self, comment:CommentModel):
+        # current_user = ServiceToken.get_current_active_userid()
+        comment_model = CommentModel(
+        id_post= comment.id_post,
+        status = comment.status,
+        description = comment.description,
+        likes= comment.likes,
+        created_at = comment.created_at,
+        updated_at = comment.updated_at,
+        )
+        self.db.add(comment_model)
+        self.db.commit()
+        return
     
-#     def get_post_by_id(self,id:int):
-#         result = self.db.query(PostModel).filter(PostModel.id == id).first()
-#         return result
+    def get_comment_by_id(self,id:int):
+        result = self.db.query(CommentModel).filter(CommentModel.id == id).first()
+        return result
     
-#     def delete_post(self,id:int):
-#         post = self.get_post_by_id(id)
-#         if not post:
-#             return None
-#         self.db.delete(post)
-#         self.db.commit()
-#         return post
+    def delete_comment(self,id:int):
+        comment = self.get_comment_by_id(id)
+        if not comment:
+            return None
+        self.db.delete(comment)
+        self.db.commit()
+        return comment
 
-#     def get_post_by_status(self, status: str):
-#         post_model = self.db.query(PostModel).filter(PostModel.status == status).all()
-#         if post_model is None:
-#             raise HTTPException(
-#                 status_code=status.HTTP_404_NOT_FOUND,
-#                 detail=f"Status does not exist"
-#             )
-#         return post_model
+    def get_comment_by_status(self, status: str):
+        comment_model = self.db.query(CommentModel).filter(CommentModel.status == status).all()
+        if comment_model is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Status does not exist"
+            )
+        return comment_model
     
-#     def update_post(self,id:int, post_schema:PostSchema):
-#         post = self.db.query(PostModel).get(id)
-#         if post:
-#             post.status = post_schema.status
-#             post.description = post_schema.description
-#             post.created_at = post_schema.created_at
-#             post.updated_at = post_schema.updated_at
-#             post.image_post = post_schema.image_post
-#             post.video_post = post_schema.video_post
-#             post.document_post = post_schema.document_post
-#             self.db.commit()
-#             return True
-#         return False
+    def update_comment(self,id:int, comment_schema:CommentSchema):
+        comment= self.db.query(CommentModel).get(id)
+        if comment:
+            comment.status = comment_schema.status
+            comment.description = comment_schema.description
+            comment.likes=comment_schema.likes
+            comment.created_at = comment_schema.created_at
+            comment.updated_at = comment_schema.updated_at
+
+            self.db.commit()
+            return True
+        return False
     

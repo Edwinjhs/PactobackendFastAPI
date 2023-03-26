@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, Text, DateTime
+from sqlalchemy import Column, Integer, String, Boolean, Text, DateTime,ForeignKey
 from sqlalchemy.orm import relationship
 
 from database import Base
@@ -7,11 +7,15 @@ class Users(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String)
+    id_type_actor= Column(Integer, ForeignKey("type_actor.id"))
+    id_city = Column(Integer, ForeignKey("city.id"))
+    id_contribution= Column(Integer, ForeignKey("contribution.id"))
+    name_user = Column(String)
     lastname = Column(String)
     email = Column(String)
     username = Column(String)
     password = Column(String)
+    entidad = Column(String)
     hashed_password = Column(String)
     cohabitation_agreement = Column(Boolean)
     status = Column(Integer)
@@ -25,3 +29,6 @@ class Users(Base):
     
     posts = relationship("Posts", back_populates="owner")
 
+    type_actor_U = relationship("TypeActor", back_populates="user_TA")
+
+    contribution = relationship('Contribution', back_populates='users')

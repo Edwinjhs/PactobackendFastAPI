@@ -36,11 +36,12 @@ class UserService():
     def create_user(self, user:UserSchema):
         hashed_password = bcrypt.hashpw(user.password.encode('utf-8'), bcrypt.gensalt())
         user_model = UserModel(
-        name = user.name,
+        name_user = user.name_user,
         lastname = user.lastname,
         email = user.email,
         username = user.username,
         password = hashed_password,
+        entidad=user.entidad,
         cohabitation_agreement = user.cohabitation_agreement,
         status = user.status,
         description = user.description,
@@ -79,7 +80,7 @@ class UserService():
     def update_user(self,id:int, user_schema:UserSchema):
         user = self.db.query(UserModel).get(id)
         if user:
-            user.name=user_schema.name
+            user.name_user=user_schema.name_user
             user.lastname = user_schema.lastname
             user.email = user_schema.email
             user.username = user_schema.username

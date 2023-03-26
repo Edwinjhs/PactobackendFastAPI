@@ -16,6 +16,7 @@ from routers.country import country_router
 from routers.departament import departament_router
 from routers.contribution import contribution_router
 from routers.contribution_text import contributiontext_router
+from routers.locations import locations_router
 
 
 from auto_db import create_type_actors, create_location, create_contributions
@@ -55,6 +56,7 @@ app.include_router(country_router)
 app.include_router(departament_router)
 app.include_router(contribution_router)
 app.include_router(contributiontext_router)
+app.include_router(locations_router)
 
 
 

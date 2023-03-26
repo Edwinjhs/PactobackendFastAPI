@@ -11,17 +11,17 @@ from service.token import user_token as TokenService
 
 city_router = APIRouter()
 
-@city_router.get("/api/city/get",tags=['location'])
+@city_router.get("/api/city/get",tags=['city'])
 def get_city(db: session = Depends(CityService.get_db)):
     result = CityService(db).get_city()
     return JSONResponse(content=jsonable_encoder(result), status_code=200)
 
-@city_router.post("/api/city/post",tags=['location'],status_code=201,response_model=dict)
+@city_router.post("/api/city/post",tags=['city'],status_code=201,response_model=dict)
 def create_city(city:CitySchema,db: session = Depends(CityService.get_db)):
     result=CityService(db).create_city(city)
     return JSONResponse(content={"message":'Se ha creado el city correctamente'})
 
-@city_router.delete('/api/city/delete/{id}',tags=['location'])
+@city_router.delete('/api/city/delete/{id}',tags=['city'])
 def delete_city(id:int, db: session = Depends(CityService.get_db),current_user: CitySchema = Depends(TokenService.get_current_active_user)):
     success = CityService(db).delete_city(id)
     if success:
@@ -30,7 +30,7 @@ def delete_city(id:int, db: session = Depends(CityService.get_db),current_user: 
         return JSONResponse(content="city not found", status_code=404)
 
 
-@city_router.put('/api/city/put/{id}',tags=['location'])
+@city_router.put('/api/city/put/{id}',tags=['city'])
 def update_city(id:int,city:CitySchema, db: session = Depends(CityService.get_db),current_user: CitySchema = Depends(TokenService.get_current_active_user)):
     result = CityService(db).update_city(id,city)
     if not result:

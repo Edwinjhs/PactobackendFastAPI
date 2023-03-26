@@ -27,7 +27,7 @@ class CityService():
     def create_city(self, city:CityModel):
         # current_user = ServiceToken.get_current_active_userid()
         city_model = CityModel(
-        id_departament= city.id_department,
+        id_department= city.id_department,
         name = city.name
         )
         self.db.add(city_model)
@@ -50,7 +50,7 @@ class CityService():
     def update_city(self,id:int, city_schema:CitySchema):
         city= self.db.query(CityModel).get(id)
         if city:
-            city.id_departament = city_schema.id_department
+            city.id_department = city_schema.id_department
             city.name = city_schema.name
             self.db.commit()
             return True

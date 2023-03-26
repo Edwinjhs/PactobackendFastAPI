@@ -9,18 +9,18 @@ from service.token import user_token as TokenService
 
 user_router = APIRouter()
 
-@user_router.get("/api/",tags=['user'])
+@user_router.get("/api/user/get",tags=['user'])
 def read_api(db: session = Depends(UserService.get_db)):
     result = UserService(db).get_users()
     return JSONResponse(content=jsonable_encoder(result), status_code=200)
 
 
-@user_router.post("/api/",tags=['user'],status_code=201,response_model=dict)
+@user_router.post("/api/user/post",tags=['user'],status_code=201,response_model=dict)
 def create_user(user:UserSchema,db: session = Depends(UserService.get_db)):
     UserService(db).create_user(user)
     return JSONResponse(content={"message":'Se ha creado el usuario correctamente'})
 
-@user_router.delete('/api/user/{id}',tags=['user'])
+@user_router.delete('/api/user/delete/{id}',tags=['user'])
 def delete_user(id:int, db: session = Depends(UserService.get_db),current_user: UserSchema = Depends(TokenService.get_current_active_user)):
     success = UserService(db).delete_user(id)
     if success:
@@ -28,13 +28,13 @@ def delete_user(id:int, db: session = Depends(UserService.get_db),current_user: 
     else:
         return JSONResponse(content="user not found", status_code=404)
 
-@user_router.get("/api/user/{username}",tags=['user'])
+@user_router.get("/api/user/get/{username}",tags=['user'])
 def get_user_by_username(username, db: Session = Depends(UserService.get_db),current_user: UserSchema = Depends(TokenService.get_current_active_user)):
     user = UserService(db).get_user_by_username(username)
     return user
 
 
-@user_router.put('/api/user/{id}',tags=['user'])
+@user_router.put('/api/user/put/{id}',tags=['user'])
 def update_user(id:int,user:UserSchema, db: session = Depends(UserService.get_db),current_user: UserSchema = Depends(TokenService.get_current_active_user)):
     result = UserService(db).update_user(id, user)
     if not result:

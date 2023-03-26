@@ -2,11 +2,12 @@ from pydantic import BaseModel, Field
 import datetime
 
 class User(BaseModel):
-    name: str = Field(min_length=1)
+    name_user: str = Field(min_length=1)
     lastname: str = Field(min_length=1)
     email: str
     username: str
     password: str
+    entidad: str
     cohabitation_agreement: bool
     hashed_password: str
     status: int
@@ -21,11 +22,12 @@ class User(BaseModel):
         orm_mode=True
         schema_extra = {
             "example": {
-                "name": "edwin",
+                "name_user": "edwin",
                 "lastname": "hernandez",
                 "email": "edwin.jhnsn@gmail.com",
                 "username": "edwinjhs",
                 "password": "12345678",
+                "entidad": "colegio monseñor",
                 "hashed_password": "",
                 "cohabitation_agreement": True,
                 "status": 0,

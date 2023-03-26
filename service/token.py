@@ -11,6 +11,7 @@ import schemas.user as UserSchema
 from service.user import UserService as UserService
 from models.user import Users as UserModel
 
+
 SECRET_KEY ="jwtsecretkey"
 ALGORITHM ="HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES =15
@@ -79,6 +80,7 @@ class user_token():
         if not user_token.verify_password(password, user.password):
             return False
         return user
+    
     
     # CREA UN TOKEN DE ACCESO
     def create_access_token(data:dict, expires_delta: timedelta | None = None):

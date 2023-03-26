@@ -27,6 +27,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = 
         data={"sub": user.username}, expires_delta=access_token_expires)
     return{"access_token": access_token, "token_type": "bearer"}
 
+
 @token_router.get("/api/users/me",tags=['token'])
 async def read_users_me(current_user: UserSchema = Depends(TokenService.get_current_active_user)):
     return current_user

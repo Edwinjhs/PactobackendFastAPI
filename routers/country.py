@@ -11,17 +11,17 @@ from service.token import user_token as TokenService
 
 country_router = APIRouter()
 
-@country_router.get("/api/country/get",tags=['location'])
+@country_router.get("/api/country/get",tags=['country'])
 def get_country(db: session = Depends(CountryService.get_db)):
     result = CountryService(db).get_country()
     return JSONResponse(content=jsonable_encoder(result), status_code=200)
 
-@country_router.post("/api/country/post",tags=['location'],status_code=201,response_model=dict)
+@country_router.post("/api/country/post",tags=['country'],status_code=201,response_model=dict)
 def create_country(country:CountrySchema,db: session = Depends(CountryService.get_db)):
     result=CountryService(db).create_country(country)
     return JSONResponse(content={"message":'Se ha creado el country correctamente'})
 
-@country_router.delete('/api/country/delete/{id}',tags=['location'])
+@country_router.delete('/api/country/delete/{id}',tags=['country'])
 def delete_country(id:int, db: session = Depends(CountryService.get_db),current_user: CountrySchema = Depends(TokenService.get_current_active_user)):
     success = CountryService(db).delete_country(id)
     if success:
@@ -30,7 +30,7 @@ def delete_country(id:int, db: session = Depends(CountryService.get_db),current_
         return JSONResponse(content="country not found", status_code=404)
 
 
-@country_router.put('/api/country/put/{id}',tags=['location'])
+@country_router.put('/api/country/put/{id}',tags=['country'])
 def update_country(id:int,country:CountrySchema, db: session = Depends(CountryService.get_db),current_user: CountrySchema = Depends(TokenService.get_current_active_user)):
     result = CountryService(db).update_country(id,country)
     if not result:

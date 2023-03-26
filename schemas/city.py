@@ -10,7 +10,8 @@ class City(BaseModel):
         orm_mode=True
         schema_extra = {
             "example": {
-                "name": "ciudad(manizales), -> id_department=1antioquia,2atlantico,3BogotaDc,4Amazonas_peru,5ancash,6azuay,7bolivar",
-                "id_department": 1
+                "id_department": 1,
+                "name": "ciudad(manizales), -> id_department=1antioquia,2atlantico,3BogotaDc,4Amazonas_peru,5ancash,6azuay,7bolivar,8antofagasta",
+
             }
         }

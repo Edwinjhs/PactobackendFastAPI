@@ -1,10 +1,7 @@
 from fastapi import FastAPI, HTTPException, Depends, status
 from models.user import Users as UserModel
 from sqlalchemy.orm import Session
-
-# HASHING AND JWT 
 from passlib.context import CryptContext
-
 from schemas.user import User as UserSchema
 from database import SessionLocal
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -12,15 +9,17 @@ import bcrypt
 
 
 class UserService():
+    # Create an instance of the CryptContext class for password hashing
     pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+    # Create an instance of the OAuth2PasswordBearer class for authentication
     oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
     def __init__(self, db: Session):
-        if not isinstance(db, Session):
-            raise TypeError("db must be a Session instance")
         self.db = db
+
     @staticmethod
     def get_db():
+        # Helper method to get a database session. Yields:SQLAlchemy session
         try:
             db = SessionLocal()
             yield db
@@ -28,11 +27,12 @@ class UserService():
             db.close()
 
 
-# auth
+    # Returns all users from the database.
     def get_users(self):
         result = self.db.query(UserModel).all()
         return result
-    
+        
+    # Creates a new user in the database.
     def create_user(self, user:UserSchema):
         hashed_password = bcrypt.hashpw(user.password.encode('utf-8'), bcrypt.gensalt())
         user_model = UserModel(
@@ -56,10 +56,12 @@ class UserService():
         self.db.commit()
         return
     
+    # Returns a user by their ID.
     def get_user_by_id(self,id:int):
         result = self.db.query(UserModel).filter(UserModel.id == id).first()
         return result
     
+    # Deletes a user by their ID.
     def delete_user(self,id:int):
         user = self.get_user_by_id(id)
         if not user:
@@ -68,6 +70,7 @@ class UserService():
         self.db.commit()
         return user
 
+    # Returns a user by their username.
     def get_user_by_username(self, username: str):
         user_model = self.db.query(UserModel).filter(UserModel.username == username).first()
         if user_model is None:
@@ -77,6 +80,7 @@ class UserService():
             )
         return user_model
     
+    # Updatin user by their ID
     def update_user(self,id:int, user_schema:UserSchema):
         user = self.db.query(UserModel).get(id)
         if user:

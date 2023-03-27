@@ -1,14 +1,16 @@
-# Byte-compiled / optimized / DLL files
+# Python byte-compiled files and DLLs
 __pycache__/
 *.py[cod]
 *$py.class
 
-#file DB
+# Database file
 database.db
 
-# dotenv
+# Environment variables
 .env
 
-# node_modules
+# Node.js modules
 /node_modules
+
+# Virtual environment for Python
 /venv

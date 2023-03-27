@@ -9,6 +9,7 @@
 # # aqui vas a configurar el correo receptor 
 # receiver_email = "edwin.ejhnsn@gmail.com"
 
+#elcguyxdbrwwdlox (codigo de contraseña )
 # # Aqui es la contraseña de aplicacion https://support.google.com/accounts/answer/185833?hl=es 
 # app_password = "rubio1503"
 

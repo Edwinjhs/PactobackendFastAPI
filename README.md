@@ -1,29 +1,30 @@
 # PACTO BACKEND Using FastApi 
-### By EDUCAMAS, COHORTE 8
+### About
+This is the backend code for the PACTO project, built using FastAPI.
 
-#### STEPS
+### Getting Started
 
-- Creating a project with an environment using= 
-		python -m venv hellofastapiPY
-- Activate the environment using= 
-		hellofastapiPY_name/Scripts/activate
-- You can also install it part by part.
+#### Installation
 
-This is what you would probably do once you want to deploy your application to production:
+- To get started, you'll need to clone this repository to your local machine. Once you've done that, navigate to the project directory and create a virtual environment using venv:
+		python -m venv venv
 
-	pip install fastapi
+- Next, activate the virtual environment: 
+		source venv/bin/activate
 
-Also install uvicorn to work as the server:
+- Then, install the required packages:
+		pip install -r requirements.txt
 
-	pip install "uvicorn[standard]"
 
-And the same for each of the optional dependencies that you want to use.
+#### Running the aplication
+To run the application, use the following command:
+		uvicorn main:app --reload
 
-    Install packages with pip: -r requirements.txt
-    How to write configuration file requirements.txt
-    Export current environment configuration file: pip freeze
+This will start the application on http://localhost:8000. 
+You can access the API documentation by visiting http://localhost:8000/docs.
 
-Remember install venv first and active the enviroment for using
+
+Remember install venv, active the enviroment and install -r requirements.txt for using
 thanks
 
 ## END

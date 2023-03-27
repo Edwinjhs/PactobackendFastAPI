@@ -27,8 +27,9 @@ def create_user(user:UserSchema,db: session = Depends(UserService.get_db)):
     return JSONResponse(content={"message":'Se ha creado el usuario correctamente'})
 
 # Defining a DELETE route for deleting a user by id
+# ,current_user: UserSchema = Depends(TokenService.get_current_active_user) (agregar esto para que necesite ser authenticado)
 @user_router.delete('/api/user/delete/{id}',tags=['user'])
-def delete_user(id:int, db: session = Depends(UserService.get_db),current_user: UserSchema = Depends(TokenService.get_current_active_user)):
+def delete_user(id:int, db: session = Depends(UserService.get_db)):
     success = UserService(db).delete_user(id)
     if success:
         return JSONResponse(status_code=202,content={"message":"User deleted"})
@@ -37,13 +38,13 @@ def delete_user(id:int, db: session = Depends(UserService.get_db),current_user: 
 
 # Defining a GET route for getting a user by their username
 @user_router.get("/api/user/get/{username}",tags=['user'])
-def get_user_by_username(username, db: Session = Depends(UserService.get_db),current_user: UserSchema = Depends(TokenService.get_current_active_user)):
+def get_user_by_username(username, db: Session = Depends(UserService.get_db)):
     user = UserService(db).get_user_by_username(username)
     return user
 
 # Defining a PUT route for updating a user by id
 @user_router.put('/api/user/put/{id}',tags=['user'])
-def update_user(id:int,user:UserSchema, db: session = Depends(UserService.get_db),current_user: UserSchema = Depends(TokenService.get_current_active_user)):
+def update_user(id:int,user:UserSchema, db: session = Depends(UserService.get_db)):
     result = UserService(db).update_user(id, user)
     if not result:
         return JSONResponse(content={"message":"No se ha encontrado ningun user","status_code":"404"})

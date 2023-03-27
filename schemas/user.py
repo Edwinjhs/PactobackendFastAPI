@@ -33,6 +33,7 @@ class User(BaseModel):
                 "entidad": "colegio monseñor",
                 "hashed_password": "",
                 "cohabitation_agreement": True,
+                "type_user": 0,
                 "status": 0,
                 "description": "backend iasdas",
                 "knowledge_interests": "conocimiento, etc",

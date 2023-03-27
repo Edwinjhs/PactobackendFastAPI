@@ -10,6 +10,7 @@ from datetime import datetime
 
 Base.metadata.create_all(bind=engine)
 
+# Create type_actors
 def create_type_actors(db_session: Session):
     type_actors = [
         {"type_actor": "Organización de personas con discapacidad", "status": 0},
@@ -35,7 +36,7 @@ def create_type_actors(db_session: Session):
 def create_location():
     session = SessionLocal()
 
-    # Verificar si ya existen registros
+# Verificar si ya existen registros
     countries_count = session.query(Country).count()
     if countries_count > 2:
         print(f"location already exists!")
@@ -108,5 +109,4 @@ def create_contributions(db_session: Session):
             obj = Contribution(name=contribution)
             db_session.add(obj)
             print(f"{obj.name} created!")
-    
     db_session.commit()

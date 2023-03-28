@@ -27,7 +27,6 @@ class TypeActorService():
     def create_typeactor(self, typeactor:TAModel):
         # current_user = ServiceToken.get_current_active_userid()
         typeactor_model = TAModel(
-        id_user= typeactor.id_user,
         status = typeactor.status,
         type_actor = typeactor.type_actor,
         created_at = typeactor.created_at,

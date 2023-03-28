@@ -33,7 +33,7 @@ class UserService():
         return result
         
     # Creates a new user in the database.
-    def create_user(self, user:UserSchema):
+    def create_user(self, user:UserModel):
         hashed_password = bcrypt.hashpw(user.password.encode('utf-8'), bcrypt.gensalt())
         user_model = UserModel(
         name_user = user.name_user,
@@ -43,6 +43,9 @@ class UserService():
         password = hashed_password,
         entidad=user.entidad,
         cohabitation_agreement = user.cohabitation_agreement,
+        type_user = user.type_user,
+        name_enti = user.name_enti,
+        contribution_text = user.contribution_text,
         status = user.status,
         description = user.description,
         knowledge_interests = user.knowledge_interests,
@@ -91,6 +94,9 @@ class UserService():
             user.password = user_schema.password
             user.cohabitation_agreement = user_schema.cohabitation_agreement
             user.status = user_schema.status
+            user.type_user = user_schema.type_user
+            user.name_enti = user_schema.name_enti
+            user.contribution_text = user_schema.contribution_text,
             user.description = user_schema.description
             user.knowledge_interests = user_schema.knowledge_interests
             user.created_at = user_schema.created_at

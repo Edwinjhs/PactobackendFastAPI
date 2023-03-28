@@ -28,7 +28,7 @@ class contributiontextService():
         # current_user = ServiceToken.get_current_active_userid()
         contributiontext_model = ContributiontextModel(
         contribution_id= contributiontext.contribution_id,
-        text = contributiontext.text
+        contribution_text = contributiontext.contribution_text
         )
         self.db.add(contributiontext_model)
         self.db.commit()
@@ -51,7 +51,7 @@ class contributiontextService():
         contributiontext= self.db.query(ContributiontextModel).get(id)
         if contributiontext:
             contributiontext.contribution_id = contributiontext_schema.contribution_id
-            contributiontext.text = contributiontext_schema.text
+            contributiontext.contribution_text = contributiontext_schema.contribution_text
             self.db.commit()
             return True
         return False

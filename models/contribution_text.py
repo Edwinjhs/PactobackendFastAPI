@@ -7,6 +7,6 @@ class TextContribution(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     contribution_id = Column(Integer, ForeignKey('contribution.id'))
-    text = Column(Text, nullable=True)
+    contribution_text = Column(Text, nullable=True)
 
     contribution = relationship('Contribution', back_populates='text_contributions')

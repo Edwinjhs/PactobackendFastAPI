@@ -1,6 +1,14 @@
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 import time
+
+from sqlalchemy import create_engine, Column, Integer, String
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+import sqlite3
+import random
+import string
 
 # Import the database engine, session, and base
 from database import engine, Base, SessionLocal
@@ -18,6 +26,7 @@ from routers.contribution import contribution_router
 from routers.contribution_text import contributiontext_router
 from routers.locations import locations_router
 
+from models.user import Users as UserModel
 # Import database auto-creation functions
 from auto_db import create_type_actors, create_location, create_contributions
 
@@ -97,3 +106,55 @@ async def add_process_time_header(request:Request, call_next):
 @app.get('/',tags=['home'])
 def message():
     return HTMLResponse('<h1>This is from the backend. If you can read this in React, it\'s connected!</h1>')
+
+
+
+# # restablecer contraseña
+
+
+
+# def generar_contraseña_aleatoria():
+#     longitud = 12
+#     caracteres = string.ascii_letters + string.digits + string.punctuation
+#     contraseña = "".join(random.choice(caracteres) for i in range(longitud))
+#     return contraseña
+
+# def enviar_correo(email, contraseña):
+#     remitente = 'zulmadirectv@gmail.com'
+#     destinatario = email
+#     asunto = 'Nueva contraseña para tu cuenta'
+#     cuerpo = f'Hola,\n\nTu nueva contraseña es: {contraseña}\n\nPor favor, cambia tu contraseña en cuanto inicies sesión.\n\nSaludos,\nEl equipo de tu app'
+
+#     mensaje = MIMEMultipart()
+#     mensaje['From'] = remitente
+#     mensaje['To'] = destinatario
+#     mensaje['Subject'] = asunto
+#     mensaje.attach(MIMEText(cuerpo, 'plain'))
+
+#     servidor = smtplib.SMTP('smtp.gmail.com', 587)
+#     servidor.starttls()
+#     servidor.login(remitente, 'elcguyxdbrwwdlox')
+
+#     texto = mensaje.as_string()
+#     servidor.sendmail(remitente, destinatario, texto)
+#     servidor.quit()
+
+# @app.post("/restablecer-contraseña")
+# async def restablecer_contraseña(request: Request):
+#     email = await request.json()
+    
+#     # Consulta si el correo existe en la base de datos
+#     db = SessionLocal()
+#     usuario = db.query(UserModel).filter(UserModel.email == email).first()
+#     if usuario is None:
+#         return {"message": "No hemos encontrado el correo."}
+
+#     # Genera una nueva contraseña y actualiza el registro del usuario
+#     nueva_contraseña = generar_contraseña_aleatoria()
+#     usuario.password = nueva_contraseña
+#     db.commit()
+
+#     # Envía la nueva contraseña por correo electrónico
+#     enviar_correo(email, nueva_contraseña)
+
+#     return {"message": "Se ha enviado un correo a tu dirección para restablecer la contraseña."}

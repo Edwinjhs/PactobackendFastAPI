@@ -1,45 +1,52 @@
-# import smtplib
-# from email.mime.text import MIMEText
-# import requests
-# import time
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from fastapi import FastAPI, Request
+import sqlite3
 
-# # aqui puedes usar un correo de gmail el que vas a destinar para enviarte los correos
-# sender_email = "zulmadirectv@gmail.com" 
+reset_pw_router= FastAPI()
 
-# # aqui vas a configurar el correo receptor 
-# receiver_email = "edwin.ejhnsn@gmail.com"
+@reset_pw_router.post("/restablecer-contraseña")
+async def restablecer_contraseña(request: Request):
+    email = await request.json()
+    
+    # Consulta si el correo existe en la base de datos
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM usuarios WHERE email=?", (email,))
+    result = cursor.fetchone()
+    if result is None:
+        return {"message": "No hemos encontrado el correo."}
 
-#elcguyxdbrwwdlox (codigo de contraseña )
-# # Aqui es la contraseña de aplicacion https://support.google.com/accounts/answer/185833?hl=es 
-# app_password = "rubio1503"
+    # Crea el mensaje que se enviará
+    from_email = "zulmadirectv@gmail.com"
+    to_email = email
+    subject = "Restablecer contraseña"
+    body = "Hola,\n\nAquí está su nueva contraseña: ABC123.\n\nSaludos,\nEl equipo de mi sitio web."
 
-# def check_website_status():
-#     url = "http://127.0.0.1:8000/token/"
-#     try:
-#         response = requests.get(url)
-#         return response.status_code == 200
-#     except requests.exceptions.RequestException:
-#         return False
+    msg = MIMEMultipart()
+    msg["From"] = from_email
+    msg["To"] = to_email
+    msg["Subject"] = subject
 
-# def send_email_notification():
-#     message = MIMEText("La página está en línea.", "plain", "utf-8")
-#     message["Subject"] = "Notificación: Página en línea"
-#     message["From"] = sender_email
-#     message["To"] = receiver_email
+    text = MIMEText(body)
+    msg.attach(text)
 
-#     try:
-#         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-#             server.login(sender_email, app_password)
-#             server.sendmail(sender_email, receiver_email, message.as_string())
-#             print("Correo electrónico enviado correctamente.")
-#     except Exception as e:
-#         print(f"Error al enviar el correo electrónico: {e}")
+    # Establece la conexión con el servidor SMTP
+    smtp_server = "smtp.gmail.com"
+    smtp_port = 587
+    server = smtplib.SMTP(smtp_server, smtp_port)
 
-# while True:
-#     if check_website_status():
-#         print("La página está en línea.")
-#         send_email_notification()
-#         break
-#     else:
-#         print("La página no está en línea. Reintentando en 1 minuto.")
-#         time.sleep(60)
+    # Inicia sesión en la cuenta de correo electrónico
+    email_address = from_email
+    password = "elcguyxdbrwwdlox"
+    server.starttls()
+    server.login(email_address, password)
+
+    # Envía el correo electrónico
+    server.sendmail(from_email, to_email, msg.as_string())
+
+    # Cierra la conexión con el servidor SMTP
+    server.quit()
+
+    return {"message": "Se ha enviado un correo electrónico con una nueva contraseña."}

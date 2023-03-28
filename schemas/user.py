@@ -3,20 +3,23 @@ from typing import Optional
 import datetime
 
 class User(BaseModel):
-    name_user: str = Field(min_length=1)
-    lastname: str = Field(min_length=1)
+    name_user: Optional[str] = None
+    lastname: Optional[str] = None
     email: Optional[str] = None
-    username: str
-    password: str
+    username: Optional[str] = None
+    password: Optional[str] = None
     entidad: Optional[str] = None
     cohabitation_agreement: Optional[bool] = None
+    type_user: Optional[int]=None
+    name_enti:Optional[str] = None
+    contribution_text: Optional[str] = None
     hashed_password: Optional[str] = None
-    status: int = 0
+    status: Optional[int] = 1
     description: Optional[str] = None
     knowledge_interests: Optional[str] = None
     created_at: datetime.datetime = Field(default_factory=datetime.datetime.utcnow)
     updated_at: datetime.datetime = Field(default_factory=datetime.datetime.utcnow)
-    forgot_password: bool = False
+    forgot_password: Optional[bool] = False
     image_profile: Optional[str] = None
     phone_number: Optional[str] = None
     class Config:
@@ -34,6 +37,8 @@ class User(BaseModel):
                 "hashed_password": "",
                 "cohabitation_agreement": True,
                 "type_user": 0,
+                "name_enti":"ledcorp",
+                "contribution_text":"mis contribuciones han sido ....",
                 "status": 0,
                 "description": "backend iasdas",
                 "knowledge_interests": "conocimiento, etc",

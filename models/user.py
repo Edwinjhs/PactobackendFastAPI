@@ -19,6 +19,8 @@ class Users(Base):
     entidad = Column(String) # Entity of the user (company, organization, etc.)
     hashed_password = Column(String) # Hashed password of the user (deprecated)
     cohabitation_agreement = Column(Boolean) # Boolean indicating if the user has a cohabitation agreement
+    name_enti = Column(String) #
+    contribution_text = Column(Text, nullable=True)
     type_user = Column(Integer, default=0) # Status of the user (e.g. active, inactive)
     status = Column(Integer, default=0) # Status of the user (e.g. active, inactive)
     description = Column(Text) # Description of the user (bio, summary, etc.)

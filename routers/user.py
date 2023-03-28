@@ -1,8 +1,13 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, File, UploadFile
 from fastapi.responses import  JSONResponse
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import session, Session
+from PIL import Image
+import os
+import shutil
 
+
+from models.user import Users as UserModel
 from service.user import UserService as UserService
 from schemas.user import User as UserSchema
 from service.token import user_token as TokenService
@@ -71,3 +76,24 @@ def update_user(id: int, user: UserSchema, db: Session = Depends(UserService.get
         return JSONResponse(content={"message": f"No se ha encontrado ningun usuario con id {id}"}, status_code=404)
     UserService(db).update_user(id, user)
     return JSONResponse(content={"message": f"Se ha modificado el usuario con id: {id}"}, status_code=200)
+
+# subiendo imagenes
+
+@user_router.post("/uploadfile/", tags=['user profile'])
+async def create_upload_file(image: UploadFile = File(...)):
+    print(image)
+    with open(image.filename, "wb") as buffer:
+        shutil.copyfileobj(image.file, buffer)
+    return {"message": "Image uploaded successfully!"}
+
+
+@user_router.get("/image_path/")
+async def get_image_path():
+    return {"image_path": os.path.abspath("image.jpg")}
+
+
+@user_router.get("/api/user/getimageprofile/{username}", tags=['user'])
+def read_api(username, db: Session = Depends(UserService.get_db)):
+        user = UserService(db).get_user_by_username(username)
+        return user.image_profile
+

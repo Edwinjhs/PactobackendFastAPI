@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from fastapi.responses import  JSONResponse
 from fastapi.encoders import jsonable_encoder
-from sqlalchemy.orm import session, Session
+from sqlalchemy.orm import session
 
 from service.departament import DepartamentService as DepartamentService
 from schemas.departament import Departament as DepartamentSchema

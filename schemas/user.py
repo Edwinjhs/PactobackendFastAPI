@@ -3,12 +3,14 @@ from typing import Optional
 import datetime
 
 class User(BaseModel):
+    id_type_actor: Optional[int]=None
     name_user: Optional[str] = None
+    id_city: Optional[int]=None
+    id_contribution: Optional[int]=None
     lastname: Optional[str] = None
     email: Optional[str] = None
     username: Optional[str] = None
     password: Optional[str] = None
-    entidad: Optional[str] = None
     cohabitation_agreement: Optional[bool] = None
     type_user: Optional[int]=None
     name_enti:Optional[str] = None

@@ -16,7 +16,6 @@ class Users(Base):
     email = Column(String) # Email address of the user
     username = Column(String) # Username of the user
     password = Column(String) # Hashed password of the user
-    entidad = Column(String) # Entity of the user (company, organization, etc.)
     hashed_password = Column(String) # Hashed password of the user (deprecated)
     cohabitation_agreement = Column(Boolean) # Boolean indicating if the user has a cohabitation agreement
     name_enti = Column(String) #
